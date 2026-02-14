@@ -10,6 +10,18 @@
 !.yarn/releases
 !.yarn/versions
 
+# Python files
+*.py
+
+# Excel files
+*.xlsx
+
+# Markdown files
+*.md
+
+# Temporary Claude directories
+tmpclaude-*
+
 # testing
 /coverage
 
