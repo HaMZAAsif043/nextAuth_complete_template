@@ -1,0 +1,13 @@
+// Base Prisma configuration
+// This file contains the database connection and client generation settings
+// All model files in this directory will be automatically merged
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // Database URL is provided via prisma.config.ts (datasource.url)
+}

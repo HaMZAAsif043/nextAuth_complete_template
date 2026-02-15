@@ -1,0 +1,18 @@
+// User model for authentication and user management
+// Supports both credential-based and OAuth authentication
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?   // For credential-based authentication
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("users")
+}
+ b
