@@ -86,7 +86,7 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-zinc-600">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="font-medium text-zinc-900 hover:text-zinc-700"
@@ -161,7 +161,7 @@ export default function LoginPage() {
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
 
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-zinc-300" />
             </div>
@@ -186,9 +186,9 @@ export default function LoginPage() {
               />
               Continue with Google
             </div>
-          </button>
+          </button> */}
 
-          {!showMagicLink && !magicLinkSent && (
+          {/* {!showMagicLink && !magicLinkSent && (
             <button
               type="button"
               onClick={() => setShowMagicLink(true)}
@@ -211,7 +211,7 @@ export default function LoginPage() {
                 Continue with Email
               </div>
             </button>
-          )}
+          )} */}
 
           {showMagicLink && !magicLinkSent && (
             <div className="space-y-3">
@@ -235,7 +235,7 @@ export default function LoginPage() {
                     placeholder="you@example.com"
                   />
                   <p className="mt-1 text-xs text-zinc-500">
-                    We'll send you a magic link to sign in
+                    We&apos;ll send you a magic link to sign in
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -284,7 +284,7 @@ export default function LoginPage() {
                   </h3>
                   <div className="mt-2 text-sm text-green-700">
                     <p>
-                      We've sent a magic link to <strong>{magicLinkEmail}</strong>. Click the link in the email to sign in.
+                      We&apos;ve sent a magic link to <strong>{magicLinkEmail}</strong>. Click the link in the email to sign in.
                     </p>
                   </div>
                   <div className="mt-4">
