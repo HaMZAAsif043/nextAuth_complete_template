@@ -1,0 +1,25 @@
+model Leads {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  phoneNumber     String    @unique
+  postCode        String
+  propertyType    String
+  roofType        String
+  electricityBill String
+  comments        String?
+  aiScore         Float?    @default(0)
+  scoringDetails  Json?
+  status          String    @default("new")
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  contactedAt     DateTime?
+  qualifiedAt     DateTime?
+
+  @@index([email])
+  @@index([status])
+  @@index([aiScore])
+  @@index([createdAt])
+  @@map("leads")
+}

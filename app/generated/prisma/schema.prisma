@@ -1,0 +1,85 @@
+model Account {
+  id                String  @id
+  type              String
+  provider          String
+  scope             String?
+  accessToken       String?
+  expiresAt         Int?
+  idToken           String?
+  providerAccountId String
+  refreshToken      String?
+  sessionState      String?
+  tokenType         String?
+  userId            String
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Leads {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  phoneNumber     String    @unique
+  postCode        String
+  propertyType    String
+  roofType        String
+  electricityBill String
+  comments        String?
+  aiScore         Float?    @default(0)
+  scoringDetails  Json?
+  status          String    @default("new")
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  contactedAt     DateTime?
+  qualifiedAt     DateTime?
+
+  @@index([email])
+  @@index([status])
+  @@index([aiScore])
+  @@index([createdAt])
+  @@map("leads")
+}
+
+model Session {
+  id           String   @id
+  expires      DateTime
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  image         String?
+  password      String?
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

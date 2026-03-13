@@ -1,10 +1,7 @@
-// VerificationToken model for email verification and password reset
-// Used for magic link authentication and password reset tokens
-
 model VerificationToken {
-  identifier String   // Email address
-  token      String   // Secure random token
-  expires    DateTime // Expiration timestamp
+  identifier String
+  token      String
+  expires    DateTime
 
   @@unique([identifier, token])
   @@map("verification_tokens")

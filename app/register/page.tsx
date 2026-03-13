@@ -31,7 +31,7 @@ export default function RegisterPage() {
 
     try {
       // Register user
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -42,12 +42,11 @@ export default function RegisterPage() {
       })
 
       const data = await response.json()
-
-      if (!response.ok) {
+      console.log(data)
+      if (data.status === 400) {
         throw new Error(data.error || "Registration failed")
       }
 
-      // Auto sign in after successful registration
       const signInResult = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
