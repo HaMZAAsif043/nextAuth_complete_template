@@ -8,22 +8,22 @@ const Footer = () => {
   const footerLinks = {
     Product: [
       { name: "Features", href: "#" },
-      { name: "Pricing", href: "#" },
+      // { name: "Pricing", href: "#" },
       { name: "How It Works", href: "#how-it-works" },
       { name: "FAQ", href: "#" },
     ],
     Company: [
       { name: "About Us", href: "#" },
-      { name: "Blog", href: "#" },
-      { name: "Careers", href: "#" },
+      // { name: "Blog", href: "#" },
+      // { name: "Careers", href: "#" },
       { name: "Contact", href: "#" },
     ],
-    Legal: [
-      { name: "Privacy Policy", href: "#" },
-      { name: "Terms of Service", href: "#" },
-      { name: "Cookie Policy", href: "#" },
-      { name: "Disclaimer", href: "#" },
-    ],
+    // Legal: [
+    //   { name: "Privacy Policy", href: "#" },
+    //   { name: "Terms of Service", href: "#" },
+    //   { name: "Cookie Policy", href: "#" },
+    //   { name: "Disclaimer", href: "#" },
+    // ],
   }
 
   return (
@@ -35,7 +35,7 @@ const Footer = () => {
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <Sun className="w-8 h-8 text-orange-500" />
-              <span className="font-bold text-xl text-white">SolarAI Leads</span>
+              <span className="font-bold text-xl text-white">Multi Letra Ltd</span>
             </div>
             <p className="text-gray-400 text-sm mb-6">
               Connecting homeowners with trusted solar installers and savings.
@@ -103,7 +103,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-sm">
-            © {currentYear} SolarAI Leads. All rights reserved.
+            © {currentYear} Multi Letra Ltd. All rights reserved.
           </p>
 
           {/* Language / Region selector placeholder */}
@@ -124,7 +124,7 @@ const Footer = () => {
       {/* Disclaimer Banner */}
       <div className="bg-gray-950 py-4 px-6 text-center text-xs text-gray-500">
         <p>
-          SolarAI Leads is a lead generation service. We are not solar installers. Quotes and services are provided by our partner companies.
+          Multi Letra Ltd is a lead generation service. We are not solar installers. Quotes and services are provided by our partner companies.
         </p>
       </div>
     </footer>

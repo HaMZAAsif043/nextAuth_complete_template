@@ -7,6 +7,7 @@ const leadSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
+  fullAddress: z.string().min(8, "Full address must be valid"),
   postCode: z.string().min(4, "Post code must be valid"),
   propertyType: z.string().min(1, "Property type is required"),
   roofType: z.string().min(1, "Roof type is required"),
@@ -16,7 +17,6 @@ const leadSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse request body
     const body = await request.json()
 
     // Validate data
@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
         propertyType: validated.propertyType,
         roofType: validated.roofType,
         electricityBill: validated.electricityBill,
-        comments: validated.comments || null,
+        comments: validated.comments?.trim() ? validated.comments : null,
+        notes: validated.fullAddress,
       },
     })
 

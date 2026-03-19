@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { Clock3, MapPinHouse, ShieldCheck, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 import {
     Field,
     FieldGroup,
@@ -27,6 +29,7 @@ export function LeadForm() {
         name: "",
         email: "",
         phoneNumber: "",
+        fullAddress: "",
         propertyType: "",
         roofType: "",
         postCode: "",
@@ -35,7 +38,8 @@ export function LeadForm() {
     })
 
     const [loading, setLoading] = useState(false)
-    const [message, setMessage] = useState("")
+    const inputClassName = "h-11 border-orange-200/80 bg-white/95 shadow-[0_1px_0_rgba(0,0,0,0.02)] focus-visible:border-orange-400 focus-visible:ring-orange-100"
+    const selectClassName = "h-11 w-full border-orange-200/80 bg-white/95 focus-visible:border-orange-400 focus-visible:ring-orange-100"
 
     // 2️⃣ Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -51,7 +55,6 @@ export function LeadForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
-        setMessage("")
 
         try {
             const res = await fetch("/api/leads", {
@@ -62,11 +65,12 @@ export function LeadForm() {
 
             const data = await res.json()
             if (res.ok) {
-                setMessage("Lead submitted successfully!")
+                toast.success("Thank you for your interest. A suitable solar company will be in contact soon.")
                 setFormData({
                     name: "",
                     email: "",
                     phoneNumber: "",
+                    fullAddress: "",
                     propertyType: "",
                     roofType: "",
                     postCode: "",
@@ -74,74 +78,98 @@ export function LeadForm() {
                     comments: "",
                 })
             } else {
-                setMessage(data.message || "Failed to submit lead.")
+                toast.error(data.message || "Failed to submit lead.")
             }
         } catch (_error) {
-            setMessage("Error submitting lead.")
+            toast.error("Error submitting lead.")
         } finally {
             setLoading(false)
         }
     }
 
     return (
-        <div className="w-full max-w-md mx-auto">
+        <div className="mx-auto w-full max-w-3xl">
             <form onSubmit={handleSubmit}>
-                <FieldGroup>
+                <FieldGroup className="gap-6">
+                    <div className="grid grid-cols-1 gap-2 rounded-2xl border border-orange-200/80 bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 p-3 text-xs text-orange-700 sm:grid-cols-3 sm:text-sm">
+                        <p className="flex items-center justify-center gap-1.5 font-medium"><Clock3 className="h-4 w-4" /> Takes 2 minutes</p>
+                        <p className="flex items-center justify-center gap-1.5 font-medium"><ShieldCheck className="h-4 w-4" /> Data stays private</p>
+                        <p className="flex items-center justify-center gap-1.5 font-medium"><Sparkles className="h-4 w-4" /> Free quote today</p>
+                    </div>
+
                     {/* Lead Details */}
-                    <FieldSet>
-                        <FieldLegend>Lead Details</FieldLegend>
-                        <FieldGroup>
+                    <FieldSet className="rounded-2xl border border-orange-100 bg-gradient-to-b from-orange-50/70 to-white p-4 shadow-[0_10px_30px_-24px_rgba(249,115,22,0.55)] md:p-5">
+                        <FieldLegend className="flex items-center gap-2 text-gray-900">
+                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">1</span>
+                            Lead Details
+                        </FieldLegend>
+                        <FieldGroup className="grid gap-4 md:grid-cols-2">
                             <Field>
-                                <FieldLabel htmlFor="name">Name</FieldLabel>
-                                <Input id="name" value={formData.name} onChange={handleChange} required />
+                                <FieldLabel htmlFor="name" className="text-sm font-semibold text-gray-700">Name</FieldLabel>
+                                <Input id="name" value={formData.name} onChange={handleChange} required className={inputClassName} />
                             </Field>
 
                             <Field>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
-                                <Input id="email" value={formData.email} onChange={handleChange} required />
+                                <FieldLabel htmlFor="email" className="text-sm font-semibold text-gray-700">Email</FieldLabel>
+                                <Input id="email" value={formData.email} onChange={handleChange} required className={inputClassName} />
                             </Field>
 
-                            <Field>
-                                <FieldLabel htmlFor="phoneNumber">Phone Number</FieldLabel>
+                            <Field className="md:col-span-2">
+                                <FieldLabel htmlFor="phoneNumber" className="text-sm font-semibold text-gray-700">Phone Number</FieldLabel>
                                 <Input
                                     id="phoneNumber"
                                     value={formData.phoneNumber}
                                     onChange={handleChange}
+                                    className={inputClassName}
                                     required
                                 />
+                            </Field>
+
+                            <Field className="md:col-span-2">
+                                <FieldLabel htmlFor="fullAddress" className="text-sm font-semibold text-gray-700">Full Address</FieldLabel>
+                                <div className="relative">
+                                    <MapPinHouse className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-orange-300" />
+                                    <Input
+                                        id="fullAddress"
+                                        value={formData.fullAddress}
+                                        onChange={handleChange}
+                                        className="h-11 border-orange-200/80 bg-white/95 pl-9 focus-visible:border-orange-400 focus-visible:ring-orange-100"
+                                        placeholder="Street, area, city"
+                                        required
+                                    />
+                                </div>
                             </Field>
                         </FieldGroup>
                     </FieldSet>
 
-                    <FieldSeparator />
+                    <FieldSeparator className="text-orange-300" />
 
                     {/* Property Details */}
-                    <FieldSet>
-                        <FieldLegend>Property Details</FieldLegend>
-                        <FieldGroup>
+                    <FieldSet className="rounded-2xl border border-orange-100 bg-gradient-to-b from-orange-50/70 to-white p-4 shadow-[0_10px_30px_-24px_rgba(249,115,22,0.55)] md:p-5">
+                        <FieldLegend className="flex items-center gap-2 text-gray-900">
+                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">2</span>
+                            Property Details
+                        </FieldLegend>
+                        <FieldGroup className="grid gap-4 md:grid-cols-2">
                             <Field>
-                                <FieldLabel htmlFor="roofType">Roof Type</FieldLabel>
-                                <Select onValueChange={value => handleSelectChange("roofType", value)}>
-                                    <SelectTrigger id="roofType">
-                                        <SelectValue placeholder="Select roof type" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="tile">Tile</SelectItem>
-                                            <SelectItem value="metal">Metal</SelectItem>
-                                            <SelectItem value="flat">Flat</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
+                                <FieldLabel htmlFor="roofType" className="text-sm font-semibold text-gray-700">Roof Type</FieldLabel>
+                                <Input
+                                    id="roofType"
+                                    value={formData.roofType}
+                                    onChange={handleChange}
+                                    className={inputClassName}
+                                    placeholder="Type your roof type"
+                                    required
+                                />
                             </Field>
 
                             <Field>
-                                <FieldLabel htmlFor="propertyType">Property Type</FieldLabel>
+                                <FieldLabel htmlFor="propertyType" className="text-sm font-semibold text-gray-700">Property Type</FieldLabel>
                                 <Select onValueChange={value => handleSelectChange("propertyType", value)}>
-                                    <SelectTrigger id="propertyType">
+                                    <SelectTrigger id="propertyType" className={selectClassName}>
                                         <SelectValue placeholder="Select property type" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="border border-orange-100">
                                         <SelectGroup>
                                             <SelectItem value="residential">Residential</SelectItem>
                                             <SelectItem value="commercial">Commercial</SelectItem>
@@ -152,52 +180,75 @@ export function LeadForm() {
                             </Field>
 
                             <Field>
-                                <FieldLabel htmlFor="postCode">Postcode</FieldLabel>
-                                <Input id="postCode" value={formData.postCode} onChange={handleChange} required />
+                                <FieldLabel htmlFor="postCode" className="text-sm font-semibold text-gray-700">Postcode</FieldLabel>
+                                <Input id="postCode" value={formData.postCode} onChange={handleChange} required className={inputClassName} />
                             </Field>
 
                             <Field>
-                                <FieldLabel htmlFor="electricityBill">Approx. Electricity Bill ($)</FieldLabel>
-                                <Input
-                                    id="electricityBill"
-                                    value={formData.electricityBill}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <FieldLabel htmlFor="electricityBill" className="text-sm font-semibold text-gray-700">Approx. Electricity Bill (£/month)</FieldLabel>
+                                <div className="relative">
+                                    <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-orange-400">£</span>
+                                    <Input
+                                        id="electricityBill"
+                                        inputMode="decimal"
+                                        value={formData.electricityBill}
+                                        onChange={handleChange}
+                                        className={`${inputClassName} pl-7`}
+                                        placeholder="e.g. 120"
+                                        required
+                                    />
+                                </div>
                             </Field>
                         </FieldGroup>
                     </FieldSet>
 
-                    <FieldSeparator />
+                    <FieldSeparator className="text-orange-300" />
 
                     {/* Comments */}
-                    <FieldSet>
-                        <FieldLegend>Additional Comments</FieldLegend>
+                    <FieldSet className="rounded-2xl border border-orange-100 bg-gradient-to-b from-orange-50/70 to-white p-4 shadow-[0_10px_30px_-24px_rgba(249,115,22,0.55)] md:p-5">
+                        <FieldLegend className="flex items-center gap-2 text-gray-900">
+                            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">3</span>
+                            Additional Comments
+                        </FieldLegend>
                         <FieldGroup>
                             <Field>
-                                <FieldLabel htmlFor="comments">Comments</FieldLabel>
+                                <FieldLabel htmlFor="comments" className="text-sm font-semibold text-gray-700">Comments</FieldLabel>
                                 <Textarea
                                     id="comments"
                                     value={formData.comments}
                                     onChange={handleChange}
-                                    className="resize-none"
+                                    className="min-h-28 resize-none border-orange-200 bg-white/95 focus-visible:border-orange-400 focus-visible:ring-orange-100"
                                 />
                             </Field>
                         </FieldGroup>
                     </FieldSet>
 
                     {/* Form Buttons */}
-                    <Field orientation="horizontal" className="gap-2 mt-4">
-                        <Button type="submit" disabled={loading}>
-                            {loading ? "Submitting..." : "Submit"}
+                    <Field orientation="horizontal" className="mt-2 gap-3">
+                        <Button type="submit" disabled={loading} className="h-11 flex-1 border-orange-500 bg-gradient-to-r from-orange-500 to-amber-500 px-6 text-sm font-semibold text-white shadow-[0_12px_24px_-16px_rgba(245,115,22,0.8)] hover:from-orange-600 hover:to-amber-600 sm:flex-none">
+                            {loading ? "Submitting..." : "Get My Free Quote"}
                         </Button>
-                        <Button variant="outline" type="button">
-                            Cancel
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => {
+                                setFormData({
+                                    name: "",
+                                    email: "",
+                                    phoneNumber: "",
+                                    fullAddress: "",
+                                    propertyType: "",
+                                    roofType: "",
+                                    postCode: "",
+                                    electricityBill: "",
+                                    comments: "",
+                                })
+                            }}
+                            className="h-10 border-orange-200 bg-white px-5 text-sm text-orange-600 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+                        >
+                            Clear
                         </Button>
                     </Field>
-
-                    {/* Message */}
-                    {message && <p className="mt-2 text-sm text-blue-600">{message}</p>}
                 </FieldGroup>
             </form>
         </div>

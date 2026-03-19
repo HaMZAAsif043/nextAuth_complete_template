@@ -26,7 +26,7 @@ const Navbar = () => {
         onClick={() => handleNavigation("/")}
       >
         <Sun className="w-8 h-8 text-orange-500" />
-        <span className="font-bold text-xl text-gray-800 hidden sm:inline">SolarAI Leads</span>
+        <span className="font-bold text-xl text-gray-800 hidden sm:inline">Multi Letra Ltd</span>
       </div>
 
       {/* Navigation Links */}
