@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    reactCompiler: {
+  turbopack: {
+    root: __dirname,
+  },
+  reactCompiler: {
     compilationMode: 'annotation',
   },
 };

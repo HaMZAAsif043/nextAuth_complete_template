@@ -45,7 +45,9 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Accounts
  * const accounts = await prisma.account.findMany()
  * ```
@@ -66,7 +68,9 @@ export class PrismaClient<
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
-   * const prisma = new PrismaClient()
+   * const prisma = new PrismaClient({
+   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * })
    * // Fetch zero or more Accounts
    * const accounts = await prisma.account.findMany()
    * ```
@@ -146,7 +150,7 @@ export class PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
    */
   $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
@@ -255,8 +259,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.4.0
-   * Query Engine version: ab56fe763f921d033a6c195e7ddeb3e255bdbb57
+   * Prisma Client JS version: 7.5.0
+   * Query Engine version: 280c870be64f457428992c43c1f6d557fab6e29e
    */
   export type PrismaVersion = {
     client: string
@@ -2230,6 +2234,11 @@ export namespace Prisma {
      * Skip the first `n` Accounts.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Accounts.
+     */
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
   }
 
@@ -2479,6 +2488,7 @@ export namespace Prisma {
     propertyType: string | null
     roofType: string | null
     electricityBill: string | null
+    fullAddress: string | null
     comments: string | null
     aiScore: number | null
     status: string | null
@@ -2498,6 +2508,7 @@ export namespace Prisma {
     propertyType: string | null
     roofType: string | null
     electricityBill: string | null
+    fullAddress: string | null
     comments: string | null
     aiScore: number | null
     status: string | null
@@ -2517,6 +2528,7 @@ export namespace Prisma {
     propertyType: number
     roofType: number
     electricityBill: number
+    fullAddress: number
     comments: number
     aiScore: number
     scoringDetails: number
@@ -2549,6 +2561,7 @@ export namespace Prisma {
     propertyType?: true
     roofType?: true
     electricityBill?: true
+    fullAddress?: true
     comments?: true
     aiScore?: true
     status?: true
@@ -2568,6 +2581,7 @@ export namespace Prisma {
     propertyType?: true
     roofType?: true
     electricityBill?: true
+    fullAddress?: true
     comments?: true
     aiScore?: true
     status?: true
@@ -2587,6 +2601,7 @@ export namespace Prisma {
     propertyType?: true
     roofType?: true
     electricityBill?: true
+    fullAddress?: true
     comments?: true
     aiScore?: true
     scoringDetails?: true
@@ -2694,6 +2709,7 @@ export namespace Prisma {
     propertyType: string
     roofType: string
     electricityBill: string
+    fullAddress: string | null
     comments: string | null
     aiScore: number | null
     scoringDetails: JsonValue | null
@@ -2733,6 +2749,7 @@ export namespace Prisma {
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
+    fullAddress?: boolean
     comments?: boolean
     aiScore?: boolean
     scoringDetails?: boolean
@@ -2753,6 +2770,7 @@ export namespace Prisma {
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
+    fullAddress?: boolean
     comments?: boolean
     aiScore?: boolean
     scoringDetails?: boolean
@@ -2773,6 +2791,7 @@ export namespace Prisma {
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
+    fullAddress?: boolean
     comments?: boolean
     aiScore?: boolean
     scoringDetails?: boolean
@@ -2793,6 +2812,7 @@ export namespace Prisma {
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
+    fullAddress?: boolean
     comments?: boolean
     aiScore?: boolean
     scoringDetails?: boolean
@@ -2804,7 +2824,7 @@ export namespace Prisma {
     qualifiedAt?: boolean
   }
 
-  export type LeadsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phoneNumber" | "postCode" | "propertyType" | "roofType" | "electricityBill" | "comments" | "aiScore" | "scoringDetails" | "status" | "notes" | "createdAt" | "updatedAt" | "contactedAt" | "qualifiedAt", ExtArgs["result"]["leads"]>
+  export type LeadsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phoneNumber" | "postCode" | "propertyType" | "roofType" | "electricityBill" | "fullAddress" | "comments" | "aiScore" | "scoringDetails" | "status" | "notes" | "createdAt" | "updatedAt" | "contactedAt" | "qualifiedAt", ExtArgs["result"]["leads"]>
 
   export type $LeadsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Leads"
@@ -2818,6 +2838,7 @@ export namespace Prisma {
       propertyType: string
       roofType: string
       electricityBill: string
+      fullAddress: string | null
       comments: string | null
       aiScore: number | null
       scoringDetails: Prisma.JsonValue | null
@@ -3258,6 +3279,7 @@ export namespace Prisma {
     readonly propertyType: FieldRef<"Leads", 'String'>
     readonly roofType: FieldRef<"Leads", 'String'>
     readonly electricityBill: FieldRef<"Leads", 'String'>
+    readonly fullAddress: FieldRef<"Leads", 'String'>
     readonly comments: FieldRef<"Leads", 'String'>
     readonly aiScore: FieldRef<"Leads", 'Float'>
     readonly scoringDetails: FieldRef<"Leads", 'Json'>
@@ -3443,6 +3465,11 @@ export namespace Prisma {
      * Skip the first `n` Leads.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Leads.
+     */
     distinct?: LeadsScalarFieldEnum | LeadsScalarFieldEnum[]
   }
 
@@ -4460,6 +4487,11 @@ export namespace Prisma {
      * Skip the first `n` Sessions.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Sessions.
+     */
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
   }
 
@@ -5531,6 +5563,11 @@ export namespace Prisma {
      * Skip the first `n` Users.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Users.
+     */
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
@@ -6568,6 +6605,11 @@ export namespace Prisma {
      * Skip the first `n` VerificationTokens.
      */
     skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VerificationTokens.
+     */
     distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
   }
 
@@ -6799,6 +6841,7 @@ export namespace Prisma {
     propertyType: 'propertyType',
     roofType: 'roofType',
     electricityBill: 'electricityBill',
+    fullAddress: 'fullAddress',
     comments: 'comments',
     aiScore: 'aiScore',
     scoringDetails: 'scoringDetails',
@@ -7068,6 +7111,7 @@ export namespace Prisma {
     propertyType?: StringFilter<"Leads"> | string
     roofType?: StringFilter<"Leads"> | string
     electricityBill?: StringFilter<"Leads"> | string
+    fullAddress?: StringNullableFilter<"Leads"> | string | null
     comments?: StringNullableFilter<"Leads"> | string | null
     aiScore?: FloatNullableFilter<"Leads"> | number | null
     scoringDetails?: JsonNullableFilter<"Leads">
@@ -7088,6 +7132,7 @@ export namespace Prisma {
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
+    fullAddress?: SortOrderInput | SortOrder
     comments?: SortOrderInput | SortOrder
     aiScore?: SortOrderInput | SortOrder
     scoringDetails?: SortOrderInput | SortOrder
@@ -7111,6 +7156,7 @@ export namespace Prisma {
     propertyType?: StringFilter<"Leads"> | string
     roofType?: StringFilter<"Leads"> | string
     electricityBill?: StringFilter<"Leads"> | string
+    fullAddress?: StringNullableFilter<"Leads"> | string | null
     comments?: StringNullableFilter<"Leads"> | string | null
     aiScore?: FloatNullableFilter<"Leads"> | number | null
     scoringDetails?: JsonNullableFilter<"Leads">
@@ -7131,6 +7177,7 @@ export namespace Prisma {
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
+    fullAddress?: SortOrderInput | SortOrder
     comments?: SortOrderInput | SortOrder
     aiScore?: SortOrderInput | SortOrder
     scoringDetails?: SortOrderInput | SortOrder
@@ -7159,6 +7206,7 @@ export namespace Prisma {
     propertyType?: StringWithAggregatesFilter<"Leads"> | string
     roofType?: StringWithAggregatesFilter<"Leads"> | string
     electricityBill?: StringWithAggregatesFilter<"Leads"> | string
+    fullAddress?: StringNullableWithAggregatesFilter<"Leads"> | string | null
     comments?: StringNullableWithAggregatesFilter<"Leads"> | string | null
     aiScore?: FloatNullableWithAggregatesFilter<"Leads"> | number | null
     scoringDetails?: JsonNullableWithAggregatesFilter<"Leads">
@@ -7438,6 +7486,7 @@ export namespace Prisma {
     propertyType: string
     roofType: string
     electricityBill: string
+    fullAddress?: string | null
     comments?: string | null
     aiScore?: number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7458,6 +7507,7 @@ export namespace Prisma {
     propertyType: string
     roofType: string
     electricityBill: string
+    fullAddress?: string | null
     comments?: string | null
     aiScore?: number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7477,6 +7527,7 @@ export namespace Prisma {
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
     comments?: NullableStringFieldUpdateOperationsInput | string | null
     aiScore?: NullableFloatFieldUpdateOperationsInput | number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7497,6 +7548,7 @@ export namespace Prisma {
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
     comments?: NullableStringFieldUpdateOperationsInput | string | null
     aiScore?: NullableFloatFieldUpdateOperationsInput | number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7517,6 +7569,7 @@ export namespace Prisma {
     propertyType: string
     roofType: string
     electricityBill: string
+    fullAddress?: string | null
     comments?: string | null
     aiScore?: number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7536,6 +7589,7 @@ export namespace Prisma {
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
     comments?: NullableStringFieldUpdateOperationsInput | string | null
     aiScore?: NullableFloatFieldUpdateOperationsInput | number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7556,6 +7610,7 @@ export namespace Prisma {
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
+    fullAddress?: NullableStringFieldUpdateOperationsInput | string | null
     comments?: NullableStringFieldUpdateOperationsInput | string | null
     aiScore?: NullableFloatFieldUpdateOperationsInput | number | null
     scoringDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -7965,6 +8020,7 @@ export namespace Prisma {
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
+    fullAddress?: SortOrder
     comments?: SortOrder
     aiScore?: SortOrder
     scoringDetails?: SortOrder
@@ -7990,6 +8046,7 @@ export namespace Prisma {
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
+    fullAddress?: SortOrder
     comments?: SortOrder
     aiScore?: SortOrder
     status?: SortOrder
@@ -8009,6 +8066,7 @@ export namespace Prisma {
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
+    fullAddress?: SortOrder
     comments?: SortOrder
     aiScore?: SortOrder
     status?: SortOrder

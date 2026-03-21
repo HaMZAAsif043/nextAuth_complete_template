@@ -2,7 +2,6 @@ import React from 'react'
 import DailyChart from './DailyChart'
 import WeeklyChart from './WeeklyChart'
 import LeadDetailsTable from './LeadDetailsTable'
-import { Funnel } from 'lucide-react';
 
 const page = () => {
   return (
@@ -25,6 +24,9 @@ const page = () => {
             <WeeklyChart />
           </div>
         </div>
+      </div>
+      <div>
+      
       </div>
       <div>
         <h1 className="pl-4 text-xl font-semibold tracking-widest uppercase text-orange-500 mb-1"> Leads Submissions</h1>

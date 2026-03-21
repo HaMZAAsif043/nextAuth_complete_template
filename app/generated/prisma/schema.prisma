@@ -35,6 +35,7 @@ model Leads {
   propertyType    String
   roofType        String
   electricityBill String
+  fullAddress     String?
   comments        String?
   aiScore         Float?    @default(0)
   scoringDetails  Json?

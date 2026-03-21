@@ -38,6 +38,8 @@ export function LeadForm() {
     })
 
     const [loading, setLoading] = useState(false)
+    const [addressLookupLoading, setAddressLookupLoading] = useState(false)
+    const [resolvedAddress, setResolvedAddress] = useState<string | null>(null)
     const inputClassName = "h-11 border-orange-200/80 bg-white/95 shadow-[0_1px_0_rgba(0,0,0,0.02)] focus-visible:border-orange-400 focus-visible:ring-orange-100"
     const selectClassName = "h-11 w-full border-orange-200/80 bg-white/95 focus-visible:border-orange-400 focus-visible:ring-orange-100"
 
@@ -49,6 +51,30 @@ export function LeadForm() {
 
     const handleSelectChange = (id: string, value: string) => {
         setFormData(prev => ({ ...prev, [id]: value }))
+    }
+
+    const lookupAddress = async () => {
+        const postCode = formData.postCode.trim()
+        if (postCode.length < 4) return
+
+        setAddressLookupLoading(true)
+        setResolvedAddress(null)
+        try {
+            const res = await fetch(`/api/postcode?postCode=${encodeURIComponent(postCode)}`)
+            const data = await res.json()
+
+            if (!res.ok || !data.address) return
+
+            setResolvedAddress(data.address)
+            setFormData(prev => ({
+                ...prev,
+                fullAddress: prev.fullAddress.trim() ? prev.fullAddress : data.address,
+            }))
+        } catch {
+            // Keep manual entry fallback when lookup fails.
+        } finally {
+            setAddressLookupLoading(false)
+        }
     }
 
     // 3️⃣ Submit handler
@@ -76,6 +102,15 @@ export function LeadForm() {
                     postCode: "",
                     electricityBill: "",
                     comments: "",
+                })
+            } else if (data.fieldErrors && Array.isArray(data.fieldErrors) && data.fieldErrors.length > 0) {
+                // Show each field validation error as a separate descriptive toast
+                data.fieldErrors.forEach((err: { field: string; message: string }) => {
+                    const fieldLabel = err.field
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, (s: string) => s.toUpperCase())
+                        .trim()
+                    toast.error(`${fieldLabel}: ${err.message}`)
                 })
             } else {
                 toast.error(data.message || "Failed to submit lead.")
@@ -135,9 +170,10 @@ export function LeadForm() {
                                         onChange={handleChange}
                                         className="h-11 border-orange-200/80 bg-white/95 pl-9 focus-visible:border-orange-400 focus-visible:ring-orange-100"
                                         placeholder="Street, area, city"
-                                        required
+                                        required={!formData.postCode.trim()}
                                     />
                                 </div>
+                                <p className="mt-1 text-xs text-gray-500">You can type this manually, or auto-fill using postcode below.</p>
                             </Field>
                         </FieldGroup>
                     </FieldSet>
@@ -181,7 +217,51 @@ export function LeadForm() {
 
                             <Field>
                                 <FieldLabel htmlFor="postCode" className="text-sm font-semibold text-gray-700">Postcode</FieldLabel>
-                                <Input id="postCode" value={formData.postCode} onChange={handleChange} required className={inputClassName} />
+                                <div className="space-y-2">
+                                    <Input
+                                        id="postCode"
+                                        value={formData.postCode}
+                                        onChange={(e) => {
+                                            handleChange(e)
+                                            setResolvedAddress(null)
+                                        }}
+                                        onBlur={lookupAddress}
+                                        required
+                                        className={inputClassName}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        disabled={addressLookupLoading || !formData.postCode.trim()}
+                                        onClick={lookupAddress}
+                                        className="h-8 border-orange-200 bg-white px-3 text-xs text-orange-600 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+                                    >
+                                        {addressLookupLoading ? "Finding address..." : "Use postcode to fill address"}
+                                    </Button>
+
+                                    {/* Autofill confirmation badge */}
+                                    {resolvedAddress && (
+                                        <div className="flex items-start gap-2 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-xs">
+                                            <svg className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                            </svg>
+                                            <div className="flex-1 min-w-0">
+                                                <span className="font-semibold text-orange-700">Address found: </span>
+                                                <span className="text-orange-600 break-words">{resolvedAddress}</span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setResolvedAddress(null)
+                                                    setFormData(prev => ({ ...prev, fullAddress: "" }))
+                                                }}
+                                                className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </Field>
 
                             <Field>

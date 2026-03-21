@@ -1,12 +1,19 @@
 import { PrismaClient } from '@/app/generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 
-function ensureSslMode(urlString: string) {
+function normalizeConnectionString(urlString: string) {
   try {
     const parsed = new URL(urlString)
     if (!parsed.searchParams.has('sslmode')) {
       parsed.searchParams.set('sslmode', 'require')
     }
+
+    const rejectUnauthorized = process.env.PG_SSL_REJECT_UNAUTHORIZED !== 'false'
+    if (!rejectUnauthorized) {
+      // Keep TLS enabled while allowing local/self-signed certificate chains.
+      parsed.searchParams.set('uselibpqcompat', 'true')
+    }
+
     return parsed.toString()
   } catch {
     return urlString
@@ -19,12 +26,13 @@ if (!rawConnectionString) {
   throw new Error('Missing database connection string. Set DATABASE_URL or DIRECT_URL in your .env file.')
 }
 
-const connectionString = ensureSslMode(rawConnectionString)
+const rejectUnauthorized = process.env.PG_SSL_REJECT_UNAUTHORIZED !== 'false'
+const connectionString = normalizeConnectionString(rawConnectionString)
 
 const adapter = new PrismaPg({
   connectionString,
   ssl: {
-    rejectUnauthorized: false, // Bypass self-signed certificate errors for both local and Supabase
+    rejectUnauthorized,
   },
 })
 
