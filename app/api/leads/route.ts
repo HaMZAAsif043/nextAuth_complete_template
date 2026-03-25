@@ -9,42 +9,103 @@ const leadSchema = z.object({
   email: z.string().email("Invalid email address"),
   phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
   fullAddress: z.string().optional(),
-  postCode: z.string().min(4, "Post code must be valid"),
+  // postCode: z.string().min(4, "Post code must be valid"),
   propertyType: z.string().min(1, "Property type is required"),
   roofType: z.string().min(1, "Roof type is required"),
   electricityBill: z.string().min(1, "Electricity bill is required"),
   comments: z.string().optional(),
 })
 
-export async function GET() {
+async function ensureLeadsTableExists() {
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS leads (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      "phoneNumber" TEXT UNIQUE NOT NULL,
+      "propertyType" TEXT NOT NULL,
+      "roofType" TEXT NOT NULL,
+      "electricityBill" TEXT NOT NULL,
+      "fullAddress" TEXT,
+      comments TEXT,
+      "aiScore" FLOAT DEFAULT 0,
+      "scoringDetails" JSON,
+      status TEXT DEFAULT 'new',
+      notes TEXT,
+      "createdAt" TIMESTAMP DEFAULT NOW(),
+      "updatedAt" TIMESTAMP DEFAULT NOW(),
+      "contactedAt" TIMESTAMP,
+      "qualifiedAt" TIMESTAMP
+    );
+  `);
+}
+
+export async function GET(request: NextRequest) {
   try {
-    const leads = await prisma.leads.findMany({
-      orderBy: { createdAt: "desc" },
-    })
+    const url = new URL(request.url);
+    const limit = Number(url.searchParams.get("limit")) || undefined;
+    const page = Number(url.searchParams.get("page")) || 1;
+    const skip = limit ? (page - 1) * limit : undefined;
+    const name = url.searchParams.get("name") || undefined;
+    const date = url.searchParams.get("date") || undefined;       // expects "YYYY-MM-DD"
+    const sortBy = url.searchParams.get("sortBy") || undefined;     // "name" | "date"
+    const sortOrder = url.searchParams.get("sortOrder") || undefined; // "asc" | "desc"
+
+    // ── Build where clause ──
+    const where: Record<string, unknown> = {};
+
+    if (name) {
+      where.name = { contains: name, mode: "insensitive" };
+    }
+
+    if (date) {
+      const from = new Date(`${date}T00:00:00.000Z`);
+      const to = new Date(`${date}T23:59:59.999Z`);
+      where.createdAt = { gte: from, lte: to };
+    }
+
+    // ── Build orderBy clause ──
+    let orderBy: Record<string, string> = { createdAt: sortOrder === "asc" ? "asc" : "desc" }; // default always respects sortOrder
+
+    if (sortBy === "name") {
+      orderBy = { name: sortOrder === "asc" ? "asc" : "desc" };
+    } else if (sortBy === "date" || !sortBy) {
+      orderBy = { createdAt: sortOrder === "asc" ? "asc" : "desc" };
+    }
+
+    // ── Query ──
+    const [leads, total] = await Promise.all([
+      prisma.leads.findMany({
+        where,
+        orderBy,
+        take: limit,
+        skip,
+      }),
+      prisma.leads.count({ where }),  // total for pagination
+    ]);
 
     const normalizedLeads = leads.map((lead) => ({
       id: lead.id,
       name: lead.name,
       email: lead.email,
       phoneNumber: lead.phoneNumber,
-      postCode: lead.postCode,
       propertyType: lead.propertyType,
       roofType: lead.roofType,
       electricityBill: lead.electricityBill,
       comments: lead.comments,
-      fullAddress: lead.fullAddress || lead.notes || lead.postCode,
+      fullAddress: lead.fullAddress || lead.notes,
       createdAt: lead.createdAt,
       status: lead.status,
       aiScore: lead.aiScore,
-    }))
+    }));
 
-    return NextResponse.json({ leads: normalizedLeads }, { status: 200 })
+    return NextResponse.json({ leads: normalizedLeads, total }, { status: 200 });
   } catch (error) {
-    console.error("Error fetching leads:", error)
+    console.error("Error fetching leads:", error);
     return NextResponse.json(
-      { message: "An error occurred while fetching leads." },
+      { message: "An error occurred while fetching leads.", error },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -69,25 +130,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const providedAddress = validated.fullAddress?.trim() || ""
-    const resolvedAddress = providedAddress || await resolveAddressFromPostcode(validated.postCode)
+    // const providedAddress = validated.fullAdd  ress?.trim() || ""
+    // const resolvedAddress = providedAddress || await resolveAddressFromPostcode(validated?.postCode)
 
     // Create new lead in database
+    // const newLead = await prisma.leads.create({
+    //   data: {
+    //     name: validated.name,
+    //     email: validated.email,
+    //     phoneNumber: String(validated.phoneNumber),
+    //     propertyType: validated.propertyType,
+    //     roofType: validated.roofType,
+    //     electricityBill: String(validated.electricityBill),
+    //     fullAddress: resolvedAddress ,
+    //     comments: validated.comments?.trim() ? validated.comments : null,
+    //     // Persist postcode-derived full address for admin UX and follow-up workflows.
+    //     notes: resolvedAddress ,
+    //   },
+    // })
+
     const newLead = await prisma.leads.create({
       data: {
         name: validated.name,
         email: validated.email,
-        phoneNumber: validated.phoneNumber,
-        postCode: validated.postCode,
+        phoneNumber: String(validated.phoneNumber),
         propertyType: validated.propertyType,
         roofType: validated.roofType,
-        electricityBill: validated.electricityBill,
-        fullAddress: resolvedAddress || validated.postCode,
-        comments: validated.comments?.trim() ? validated.comments : null,
-        // Persist postcode-derived full address for admin UX and follow-up workflows.
-        notes: resolvedAddress || validated.postCode,
+        electricityBill: String(validated.electricityBill),
+        fullAddress: validated.fullAddress?.trim() || null,
+        comments: validated.comments?.trim() || null,
+        notes: validated.fullAddress?.trim() || null,
       },
-    })
+    });
 
     return NextResponse.json(
       {
@@ -115,7 +189,7 @@ export async function POST(request: NextRequest) {
     // Handle unexpected errors
     console.error("Error creating lead:", error)
     return NextResponse.json(
-      { message: "An error occurred while submitting your lead. Please try again." },
+      { message: "An error occurred while submitting your lead. Please try again.", error },
       { status: 500 }
     )
   }

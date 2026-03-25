@@ -2484,7 +2484,6 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phoneNumber: string | null
-    postCode: string | null
     propertyType: string | null
     roofType: string | null
     electricityBill: string | null
@@ -2504,7 +2503,6 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phoneNumber: string | null
-    postCode: string | null
     propertyType: string | null
     roofType: string | null
     electricityBill: string | null
@@ -2524,7 +2522,6 @@ export namespace Prisma {
     name: number
     email: number
     phoneNumber: number
-    postCode: number
     propertyType: number
     roofType: number
     electricityBill: number
@@ -2557,7 +2554,6 @@ export namespace Prisma {
     name?: true
     email?: true
     phoneNumber?: true
-    postCode?: true
     propertyType?: true
     roofType?: true
     electricityBill?: true
@@ -2577,7 +2573,6 @@ export namespace Prisma {
     name?: true
     email?: true
     phoneNumber?: true
-    postCode?: true
     propertyType?: true
     roofType?: true
     electricityBill?: true
@@ -2597,7 +2592,6 @@ export namespace Prisma {
     name?: true
     email?: true
     phoneNumber?: true
-    postCode?: true
     propertyType?: true
     roofType?: true
     electricityBill?: true
@@ -2705,7 +2699,6 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
-    postCode: string
     propertyType: string
     roofType: string
     electricityBill: string
@@ -2745,7 +2738,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
-    postCode?: boolean
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
@@ -2766,7 +2758,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
-    postCode?: boolean
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
@@ -2787,7 +2778,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
-    postCode?: boolean
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
@@ -2808,7 +2798,6 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phoneNumber?: boolean
-    postCode?: boolean
     propertyType?: boolean
     roofType?: boolean
     electricityBill?: boolean
@@ -2824,7 +2813,7 @@ export namespace Prisma {
     qualifiedAt?: boolean
   }
 
-  export type LeadsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phoneNumber" | "postCode" | "propertyType" | "roofType" | "electricityBill" | "fullAddress" | "comments" | "aiScore" | "scoringDetails" | "status" | "notes" | "createdAt" | "updatedAt" | "contactedAt" | "qualifiedAt", ExtArgs["result"]["leads"]>
+  export type LeadsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phoneNumber" | "propertyType" | "roofType" | "electricityBill" | "fullAddress" | "comments" | "aiScore" | "scoringDetails" | "status" | "notes" | "createdAt" | "updatedAt" | "contactedAt" | "qualifiedAt", ExtArgs["result"]["leads"]>
 
   export type $LeadsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Leads"
@@ -2834,7 +2823,6 @@ export namespace Prisma {
       name: string
       email: string
       phoneNumber: string
-      postCode: string
       propertyType: string
       roofType: string
       electricityBill: string
@@ -3275,7 +3263,6 @@ export namespace Prisma {
     readonly name: FieldRef<"Leads", 'String'>
     readonly email: FieldRef<"Leads", 'String'>
     readonly phoneNumber: FieldRef<"Leads", 'String'>
-    readonly postCode: FieldRef<"Leads", 'String'>
     readonly propertyType: FieldRef<"Leads", 'String'>
     readonly roofType: FieldRef<"Leads", 'String'>
     readonly electricityBill: FieldRef<"Leads", 'String'>
@@ -6837,7 +6824,6 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     phoneNumber: 'phoneNumber',
-    postCode: 'postCode',
     propertyType: 'propertyType',
     roofType: 'roofType',
     electricityBill: 'electricityBill',
@@ -7107,7 +7093,6 @@ export namespace Prisma {
     name?: StringFilter<"Leads"> | string
     email?: StringFilter<"Leads"> | string
     phoneNumber?: StringFilter<"Leads"> | string
-    postCode?: StringFilter<"Leads"> | string
     propertyType?: StringFilter<"Leads"> | string
     roofType?: StringFilter<"Leads"> | string
     electricityBill?: StringFilter<"Leads"> | string
@@ -7128,7 +7113,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
-    postCode?: SortOrder
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
@@ -7152,7 +7136,6 @@ export namespace Prisma {
     OR?: LeadsWhereInput[]
     NOT?: LeadsWhereInput | LeadsWhereInput[]
     name?: StringFilter<"Leads"> | string
-    postCode?: StringFilter<"Leads"> | string
     propertyType?: StringFilter<"Leads"> | string
     roofType?: StringFilter<"Leads"> | string
     electricityBill?: StringFilter<"Leads"> | string
@@ -7173,7 +7156,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
-    postCode?: SortOrder
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
@@ -7202,7 +7184,6 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Leads"> | string
     email?: StringWithAggregatesFilter<"Leads"> | string
     phoneNumber?: StringWithAggregatesFilter<"Leads"> | string
-    postCode?: StringWithAggregatesFilter<"Leads"> | string
     propertyType?: StringWithAggregatesFilter<"Leads"> | string
     roofType?: StringWithAggregatesFilter<"Leads"> | string
     electricityBill?: StringWithAggregatesFilter<"Leads"> | string
@@ -7482,7 +7463,6 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
-    postCode: string
     propertyType: string
     roofType: string
     electricityBill: string
@@ -7503,7 +7483,6 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
-    postCode: string
     propertyType: string
     roofType: string
     electricityBill: string
@@ -7523,7 +7502,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    postCode?: StringFieldUpdateOperationsInput | string
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
@@ -7544,7 +7522,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    postCode?: StringFieldUpdateOperationsInput | string
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
@@ -7565,7 +7542,6 @@ export namespace Prisma {
     name: string
     email: string
     phoneNumber: string
-    postCode: string
     propertyType: string
     roofType: string
     electricityBill: string
@@ -7585,7 +7561,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    postCode?: StringFieldUpdateOperationsInput | string
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
@@ -7606,7 +7581,6 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phoneNumber?: StringFieldUpdateOperationsInput | string
-    postCode?: StringFieldUpdateOperationsInput | string
     propertyType?: StringFieldUpdateOperationsInput | string
     roofType?: StringFieldUpdateOperationsInput | string
     electricityBill?: StringFieldUpdateOperationsInput | string
@@ -8016,7 +7990,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
-    postCode?: SortOrder
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
@@ -8042,7 +8015,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
-    postCode?: SortOrder
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder
@@ -8062,7 +8034,6 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phoneNumber?: SortOrder
-    postCode?: SortOrder
     propertyType?: SortOrder
     roofType?: SortOrder
     electricityBill?: SortOrder

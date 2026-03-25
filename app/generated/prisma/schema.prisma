@@ -31,7 +31,6 @@ model Leads {
   name            String
   email           String    @unique
   phoneNumber     String    @unique
-  postCode        String
   propertyType    String
   roofType        String
   electricityBill String

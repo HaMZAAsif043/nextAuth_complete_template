@@ -34,7 +34,7 @@ export default function LeadModal({ lead, onClose }: { lead: Lead; onClose: () =
                         { label: "Phone", value: lead.phone },
                         { label: "Email", value: lead.email },
                         { label: "Address", value: lead.fullAddress || lead.postcode },
-                        { label: "Postcode", value: lead.postcode },
+                        // { label: "Postcode", value: lead.postcode },
                         { label: "Property Type", value: lead.propertyType },
                         { label: "Roof Type", value: lead.roofType },
                         { label: "Electricity Bill", value: `£${lead.electricityBill}/mo` },

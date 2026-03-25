@@ -173,7 +173,7 @@ export function LeadForm() {
                                         required={!formData.postCode.trim()}
                                     />
                                 </div>
-                                <p className="mt-1 text-xs text-gray-500">You can type this manually, or auto-fill using postcode below.</p>
+                                {/* <p className="mt-1 text-xs text-gray-500">You can type this manually</p> */}
                             </Field>
                         </FieldGroup>
                     </FieldSet>
