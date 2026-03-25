@@ -215,7 +215,7 @@ export function LeadForm() {
                                 </Select>
                             </Field>
 
-                            <Field>
+                            {/* <Field>
                                 <FieldLabel htmlFor="postCode" className="text-sm font-semibold text-gray-700">Postcode</FieldLabel>
                                 <div className="space-y-2">
                                     <Input
@@ -239,7 +239,6 @@ export function LeadForm() {
                                         {addressLookupLoading ? "Finding address..." : "Use postcode to fill address"}
                                     </Button>
 
-                                    {/* Autofill confirmation badge */}
                                     {resolvedAddress && (
                                         <div className="flex items-start gap-2 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-xs">
                                             <svg className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
@@ -262,7 +261,7 @@ export function LeadForm() {
                                         </div>
                                     )}
                                 </div>
-                            </Field>
+                            </Field> */}
 
                             <Field>
                                 <FieldLabel htmlFor="electricityBill" className="text-sm font-semibold text-gray-700">Approx. Electricity Bill (£/month)</FieldLabel>
