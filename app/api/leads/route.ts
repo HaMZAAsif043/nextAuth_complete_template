@@ -116,18 +116,25 @@ export async function POST(request: NextRequest) {
     // Validate data
     const validated = leadSchema.parse(body)
 
-    // Check for duplicate email
+    // Check for duplicate email or phone number
     const existingLead = await prisma.leads.findFirst({
       where: {
-        email: validated.email,
+        OR: [
+          { email: validated.email },
+          { phoneNumber: String(validated.phoneNumber) },
+        ],
       },
     })
 
     if (existingLead) {
-      return NextResponse.json(
-        { message: "A lead with this email already exists. Please use a different email." },
-        { status: 409 }
-      )
+      const isDuplicateEmail = existingLead.email === validated.email
+      const isDuplicatePhone = existingLead.phoneNumber === String(validated.phoneNumber)
+      let message = "A lead with this "
+      if (isDuplicateEmail && isDuplicatePhone) message += "email and phone number already exists."
+      else if (isDuplicateEmail) message += "email already exists. Please use a different email."
+      else message += "phone number already exists. Please use a different phone number."
+
+      return NextResponse.json({ message }, { status: 409 })
     }
 
     // const providedAddress = validated.fullAdd  ress?.trim() || ""
