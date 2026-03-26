@@ -12,13 +12,21 @@ if (!rawConnectionString) {
 // Load the Supabase CA certificate from project root
 const caCert = fs.readFileSync(path.join(process.cwd(), 'prod-ca-2021.crt')).toString()
 
-const adapter = new PrismaPg({
-  connectionString: rawConnectionString,
+import { Pool } from 'pg'
+
+// Strip sslmode from the connection string to prevent it from overriding the pg Pool ssl config
+const url = new URL(rawConnectionString)
+url.searchParams.delete('sslmode')
+const connectionString = url.toString()
+
+const pool = new Pool({
+  connectionString,
   ssl: {
-    rejectUnauthorized: true,  
-    ca: caCert,                
+    rejectUnauthorized: process.env.PG_SSL_REJECT_UNAUTHORIZED === 'true',
   },
 })
+
+const adapter = new PrismaPg(pool as any)
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
